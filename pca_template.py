@@ -121,16 +121,32 @@ def plot(lowDDataMat, labelMat, figname):
         #print(sets)
         #print(list(row[0]))
         #print( (list(row[0]))[0][0] )
-        if len(sets) == 0:
-            for j in range(len(row)):
-                temp = [list(row[j])[0][0]]
-                sets.append(temp)
-        else:
-            for k in range(len(sets)):
-                sets[k].append( list(row[k])[0][0] )
+        # if len(sets) == 0:
+        #     for j in range(len(row)):
+        #         temp = [list(row[j])[0][0]]
+        #         sets.append(temp)
+        # else:
+        #     for k in range(len(sets)):
+        #         sets[k].append( list(row[k])[0][0] )
 
-    plt.plot(sets[0], sets[1], 'ro')
-    plt.show()
+        temp = []
+        for j in range(len(row)):
+            temp.append(list(row[j])[0][0])
+        sets.append(temp)
+
+
+    for point, label in zip(sets, labelMat):
+        if label == 1:
+            plt.plot(point[0], point[1], marker='o', markeredgecolor='purple', markerfacecolor='purple')
+        if label == 2:
+            plt.plot(point[0], point[1], marker='o', markeredgecolor='lightseagreen', markerfacecolor='lightseagreen')
+        if label == 3:
+            plt.plot(point[0], point[1], marker='o', markeredgecolor='yellow', markerfacecolor='yellow')
+
+
+    #plt.plot(sets[0], sets[1], 'ro')
+    #plt.show()
+    plt.savefig(figname)
 
 
 
