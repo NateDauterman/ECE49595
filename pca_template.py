@@ -41,7 +41,6 @@ def pca(dataMat, PC_num=2):
 
     dataMat = numpy.matrix(dataMat)
 
-    ## github testing
     #print(len(dataMat))
     #print(dataMat)
 
@@ -57,25 +56,14 @@ def pca(dataMat, PC_num=2):
     for i, item in enumerate(means):
         means[i] = item / len(dataMat)
 
-
     #print(means)
     #print(dataMat.transpose())
-
-    #print(dataMat)
 
     for i in range(len(dataMat)):
         dataMat[i] = [a - b for a, b in zip(dataMat[i], means)]
 
     n = dataMat.size
-    # if len(dataMat) != 0:
-    #     n = len(dataMat)
-    #     print(len(dataMat)[0])
-    #     if len(dataMat[0]) != 0:
-    #         n *= len(dataMat[0])
 
-
-    #print(dataMat)
-    #print(n)
     #print(numpy.matmul(dataMat.transpose(), dataMat))
     covariance = numpy.matmul(dataMat.transpose(), dataMat) / (n - 1)
 
@@ -96,7 +84,6 @@ def pca(dataMat, PC_num=2):
     useEigvecs = sortedVecs[0:PC_num]
 
     #print(useEigvecs)
-    #print(numpy.matrix(dataMat[0].transpose()))
 
     lowDDataMat = []
     for i in range(len(dataMat)):
@@ -117,21 +104,9 @@ def plot(lowDDataMat, labelMat, figname):
     sets = []
 
     for row in lowDDataMat:
-        #print(row)
-        #print(sets)
-        #print(list(row[0]))
-        #print( (list(row[0]))[0][0] )
-        # if len(sets) == 0:
-        #     for j in range(len(row)):
-        #         temp = [list(row[j])[0][0]]
-        #         sets.append(temp)
-        # else:
-        #     for k in range(len(sets)):
-        #         sets[k].append( list(row[k])[0][0] )
-
         temp = []
         for j in range(len(row)):
-            temp.append(list(row[j])[0][0])
+            temp.append(list(row[j])[0][0]) #to strip the extra list encapsulations
         sets.append(temp)
 
 
