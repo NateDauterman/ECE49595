@@ -108,7 +108,37 @@ def get_freq(dataset, candidates, min_support, verbose=False):
         The support data for all candidate itemsets.
     """
 
-    # TODO
+    min_sup = len(dataset) * min_support
+    #print(min_sup)
+    #print(candidates)
+    #print(dataset)
+
+    support_data = {}
+    freq_list = []
+
+    for cand in candidates:
+        support = 0
+        for data in dataset:
+            if cand.issubset(data):
+                support += 1
+        if support >= min_sup:
+            freq_list.append(cand)
+        support_data[cand] = support
+
+    #print(freq_list)
+    #print(support_data)
+
+    #if verbose:
+    print("Candidate:")
+    print(candidates)
+    print()
+    print("frequent list")
+    print(freq_list)
+    print()
+
+    return freq_list, support_data
+
+
 
 def apriori_gen(freq_sets, k):
     """Generates candidate itemsets (via the F_k-1 x F_k-1 method).
@@ -133,7 +163,20 @@ def apriori_gen(freq_sets, k):
     candidate_list : list
         The list of candidate itemsets.
     """
-    # TODO
+    #for i in range(len(freq_sets)):
+    #    for j in range[]
+
+    #print(freq_sets)
+    candidate_list = []
+
+    for i in range(len(freq_sets)):
+        for j in range(i + 1, len(freq_sets)):
+            one = list(freq_sets[i])
+            two = list(freq_sets[j])
+            if one[:k - 2] == two[:k - 2]:
+                candidate_list.append(freq_sets[i] | freq_sets[j])
+
+    return candidate_list
 
 
 def loadDataSet(fileName, delim=','):
@@ -174,15 +217,10 @@ if __name__ == '__main__':
     print(support)
 
     '''
-    Example: 
-    
-    python apriori_templete.py market_data_transaction.txt 0.5 
-    
+    Example:
+
+    python apriori_templete.py market_data_transaction.txt 0.5
+
     python apriori_templete.py market_data_transaction.txt 0.5 True
-    
+
     '''
-
-
-
-
-
