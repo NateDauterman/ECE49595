@@ -129,6 +129,7 @@ def get_freq(dataset, candidates, min_support, verbose=False):
     #print(support_data)
 
     #if verbose:
+
     print("Candidate:")
     print(candidates)
     print()
@@ -168,13 +169,38 @@ def apriori_gen(freq_sets, k):
 
     #print(freq_sets)
     candidate_list = []
-
-    for i in range(len(freq_sets)):
-        for j in range(i + 1, len(freq_sets)):
-            one = list(freq_sets[i])
-            two = list(freq_sets[j])
-            if one[:k - 2] == two[:k - 2]:
+    #print(freq_sets)
+    if k == 2:
+        for i in range(len(freq_sets)):
+            for j in range(i + 1, len(freq_sets)):
                 candidate_list.append(freq_sets[i] | freq_sets[j])
+    else:
+        for i in range(len(freq_sets)):
+            for j in range(i + 1, len(freq_sets)):
+                one = list(freq_sets[i])
+                two = list(freq_sets[j])
+                #print(one[:k - 1], two[:k - 1])
+                if one[:k - 1] == two[:k - 1]:
+                    candidate_list.append(freq_sets[i] | freq_sets[j])
+
+        #print(candidate_list)
+        remove = []
+        for i in range(len(candidate_list)):
+            for freq in freq_sets:
+                #print(freq)
+                #print(candidate_list[i])
+                #print(not freq.issubset(candidate_list[i]))
+                if freq.issubset(candidate_list[i]):
+                    break
+
+
+
+        remove = sorted(set(remove), reverse=True)
+        #print(remove)
+        for i in remove:
+            candidate_list.pop(i)
+
+    #print(candidate_list)
 
     return candidate_list
 
@@ -213,8 +239,8 @@ if __name__ == '__main__':
         F, support = run_apriori(sys.argv[1], float(sys.argv[2]), bool_transfer(sys.argv[3]))
     else:
         raise ValueError('Usage: python apriori_templete.py <data_path> <min_support> <is_verbose>')
-    print(F)
-    print(support)
+    print(len(F))
+    print(len(support))
 
     '''
     Example:
