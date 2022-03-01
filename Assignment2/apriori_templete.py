@@ -131,10 +131,10 @@ def get_freq(dataset, candidates, min_support, verbose=False):
     #if verbose:
 
     print("Candidate:")
-    print(candidates)
+    print(len(candidates))
     print()
     print("frequent list")
-    print(freq_list)
+    print(len(freq_list))
     print()
 
     return freq_list, support_data
@@ -164,6 +164,10 @@ def apriori_gen(freq_sets, k):
     candidate_list : list
         The list of candidate itemsets.
     """
+
+
+    ##  CANDIDATE LIST GENERATION
+
     #for i in range(len(freq_sets)):
     #    for j in range[]
 
@@ -177,28 +181,56 @@ def apriori_gen(freq_sets, k):
     else:
         for i in range(len(freq_sets)):
             for j in range(i + 1, len(freq_sets)):
-                one = list(freq_sets[i])
-                two = list(freq_sets[j])
-                #print(one[:k - 1], two[:k - 1])
-                if one[:k - 1] == two[:k - 1]:
+                one = sorted(list(freq_sets[i]))
+                two = sorted(list(freq_sets[j]))
+                #print(one[:k - 2], two[:k - 2])
+                #print()
+
+                if one[:k - 2] == two[:k - 2]:
                     candidate_list.append(freq_sets[i] | freq_sets[j])
 
+
+    ## CANDIDATE LIST PRUNING
+    remove = []
+
+    #print(freq_sets)
+    #print(candidate_list)
+
+    for new_set in candidate_list:
+        unfrozenset = set(new_set)
+        #print(list(unfrozenset))
+        for item in list(unfrozenset):
+            unfrozenset.discard(item)
+
+            #print(unfrozenset)
+
+            if unfrozenset not in freq_sets:
+                #print(candidate_list)
+                #print(new_set)
+                #print('found')
+                if new_set in candidate_list:
+                    remove.append(new_set)
+            unfrozenset.add(item)
+
+    for item in remove:
+        candidate_list.remove(item)
+
         #print(candidate_list)
-        remove = []
-        for i in range(len(candidate_list)):
-            for freq in freq_sets:
-                #print(freq)
-                #print(candidate_list[i])
-                #print(not freq.issubset(candidate_list[i]))
-                if freq.issubset(candidate_list[i]):
-                    break
-
-
-
-        remove = sorted(set(remove), reverse=True)
-        #print(remove)
-        for i in remove:
-            candidate_list.pop(i)
+        # remove = []
+        # for i in range(len(candidate_list)):
+        #     for freq in freq_sets:
+        #         #print(freq)
+        #         #print(candidate_list[i])
+        #         #print(not freq.issubset(candidate_list[i]))
+        #         if freq.issubset(candidate_list[i]):
+        #             break
+        #
+        #
+        #
+        # remove = sorted(set(remove), reverse=True)
+        # #print(remove)
+        # for i in remove:
+        #     candidate_list.pop(i)
 
     #print(candidate_list)
 
