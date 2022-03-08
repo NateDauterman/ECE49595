@@ -108,7 +108,7 @@ def get_freq(dataset, candidates, min_support, verbose=False):
         The support data for all candidate itemsets.
     """
 
-    min_sup = len(dataset) * min_support
+    min_sup = len(dataset) * min_support #Calculate minimum support as integer
     #print(min_sup)
     #print(candidates)
     #print(dataset)
@@ -119,23 +119,22 @@ def get_freq(dataset, candidates, min_support, verbose=False):
     for cand in candidates:
         support = 0
         for data in dataset:
-            if cand.issubset(data):
+            if cand.issubset(data):  #incrememnt support if is a subset
                 support += 1
         if support >= min_sup:
-            freq_list.append(cand)
+            freq_list.append(cand) # add the candidate to freq_list if it is supported
         support_data[cand] = support
 
     #print(freq_list)
     #print(support_data)
 
-    #if verbose:
 
-    print("Candidate:")
-    print(len(candidates))
-    print()
-    print("frequent list")
-    print(len(freq_list))
-    print()
+    # print("Candidate:")
+    # print(candidates)
+    # print()
+    # print("frequent list")
+    # print(freq_list)
+    # print()
 
     return freq_list, support_data
 
@@ -168,18 +167,15 @@ def apriori_gen(freq_sets, k):
 
     ##  CANDIDATE LIST GENERATION
 
-    #for i in range(len(freq_sets)):
-    #    for j in range[]
-
     #print(freq_sets)
     candidate_list = []
     #print(freq_sets)
-    if k == 2:
+    if k == 2:  # if the candidates are single items, just combine them
         for i in range(len(freq_sets)):
             for j in range(i + 1, len(freq_sets)):
                 candidate_list.append(freq_sets[i] | freq_sets[j])
     else:
-        for i in range(len(freq_sets)):
+        for i in range(len(freq_sets)):  # otherwise use the Fk-1 * Fk-1 method
             for j in range(i + 1, len(freq_sets)):
                 one = sorted(list(freq_sets[i]))
                 two = sorted(list(freq_sets[j]))
@@ -187,11 +183,11 @@ def apriori_gen(freq_sets, k):
                 #print()
 
                 if one[:k - 2] == two[:k - 2]:
-                    candidate_list.append(freq_sets[i] | freq_sets[j])
+                    candidate_list.append(freq_sets[i] | freq_sets[j]) # if they match union them
 
 
     ## CANDIDATE LIST PRUNING
-    remove = []
+    remove = []  #list of candidates to prune
 
     #print(freq_sets)
     #print(candidate_list)
@@ -199,40 +195,22 @@ def apriori_gen(freq_sets, k):
     for new_set in candidate_list:
         unfrozenset = set(new_set)
         #print(list(unfrozenset))
-        for item in list(unfrozenset):
+        for item in list(unfrozenset):  # for each cadidate. remove one item from the set at a time
             unfrozenset.discard(item)
 
             #print(unfrozenset)
 
-            if unfrozenset not in freq_sets:
+            if unfrozenset not in freq_sets:  #if the new subeset is not frequent
                 #print(candidate_list)
                 #print(new_set)
                 #print('found')
-                if new_set in candidate_list:
+                if new_set in candidate_list:  #prune it from the candidate list
                     remove.append(new_set)
             unfrozenset.add(item)
 
     for item in remove:
-        candidate_list.remove(item)
+        candidate_list.remove(item) #remove all items from the list
 
-        #print(candidate_list)
-        # remove = []
-        # for i in range(len(candidate_list)):
-        #     for freq in freq_sets:
-        #         #print(freq)
-        #         #print(candidate_list[i])
-        #         #print(not freq.issubset(candidate_list[i]))
-        #         if freq.issubset(candidate_list[i]):
-        #             break
-        #
-        #
-        #
-        # remove = sorted(set(remove), reverse=True)
-        # #print(remove)
-        # for i in remove:
-        #     candidate_list.pop(i)
-
-    #print(candidate_list)
 
     return candidate_list
 
