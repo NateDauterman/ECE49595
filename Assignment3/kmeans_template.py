@@ -32,7 +32,7 @@ def loadCenterSet(fileName):      #general function to parse tab -delimited floa
 def assignCluster(dataSet, k, centroids):
     '''For each data point, assign it to the closest centroid
     Inputs:
-        dataSet: each row represents an observation and 
+        dataSet: each row represents an observation and
                  each column represents an attribute
         k:  number of clusters
         centroids: initial centroids or centroids of last iteration
@@ -40,15 +40,22 @@ def assignCluster(dataSet, k, centroids):
         clusterAssment: list
             assigned cluster id for each data point
     '''
-    #TODO
+    clusterAssment = []
+
+    for data in dataSet:
+        minDist = -1
+        minIndex = -1
+        for center in centroids:
+            print(center, data)
+
 
     return clusterAssment
 
 
 def getCentroid(dataSet, k, clusterAssment):
     '''recalculate centroids
-    Input: 
-        dataSet: each row represents an observation and 
+    Input:
+        dataSet: each row represents an observation and
             each column represents an attribute
         k:  number of clusters
         clusterAssment: list
@@ -56,7 +63,7 @@ def getCentroid(dataSet, k, clusterAssment):
     Output:
         centroids: cluster centroids
     '''
-    
+
     #TODO
 
     return centroids
@@ -65,7 +72,7 @@ def getCentroid(dataSet, k, clusterAssment):
 def kMeans(dataSet, T, k, centroids):
     '''
     Input:
-        dataSet: each row represents an observation and 
+        dataSet: each row represents an observation and
                 each column represents an attribute
         T:  number of iterations
         k:  number of clusters
@@ -80,7 +87,7 @@ def kMeans(dataSet, T, k, centroids):
 
     i=1
     while i < T and list(pre_clusters) != list(clusterAssment):
-        pre_clusters = copy.deepcopy(clusterAssment) 
+        pre_clusters = copy.deepcopy(clusterAssment)
         clusterAssment = assignCluster(dataSet, k, centroids )
         centroids      = getCentroid(dataSet, k, clusterAssment)
         i=i+1
