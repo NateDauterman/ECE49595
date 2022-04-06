@@ -20,9 +20,9 @@ def loadDataSet(fileName):      #general function to parse tab -delimited floats
 
 def merge_cluster(distance_matrix, cluster_candidate, T):
     ''' Merge two closest clusters according to min distances
-    1. Find the smallest entry in the distance matrix—suppose the entry 
+    1. Find the smallest entry in the distance matrix—suppose the entry
         is i-th row and j-th column
-    2. Merge the clusters that correspond to the i-th row and j-th column 
+    2. Merge the clusters that correspond to the i-th row and j-th column
         of the distance matrix as a new cluster with index T
 
     Parameters:
@@ -41,19 +41,52 @@ def merge_cluster(distance_matrix, cluster_candidate, T):
         key is the cluster id, value is point ids in the cluster
     merge_list : list of tuples
         records the two old clusters' id and points that have just been merged.
-        [(cluster_one_id, point_ids_in_cluster_one), 
+        [(cluster_one_id, point_ids_in_cluster_one),
          (cluster_two_id, point_ids_in_cluster_two)]
     '''
     merge_list = []
 
-    # TODO
+    #print(distance_matrix)
+    #print(cluster_candidate)
+
+    minValue = np.amin(distance_matrix)
+    #print(minValue)
+    index = np.where(distance_matrix.flatten() == minValue)
+    #print(minValue.flatten())
+    #print(index)
+    coords = np.unravel_index(index, (len(distance_matrix), len(distance_matrix[0])))
+    #print(coords)
+    #print(coords[0].flatten()[0])
+
+
+    for key, value in cluster_candidate.items():
+        if coords[0].flatten()[0] in value:
+            id1 = key
+        if coords[0].flatten()[1] in value:
+            id2 = key
+
+    #print(id1, id2)
+    #print(cluster_candidate[id1])
+    merge_list = [(id1, copy.deepcopy(cluster_candidate[id1])), (id2, copy.deepcopy(cluster_candidate[id2]))]
+
+    points1 = copy.deepcopy(cluster_candidate[id1])
+    points2 = copy.deepcopy(cluster_candidate[id2])
+    points1.extend(points2)
+    cluster_candidate[T] = points1
+
+    cluster_candidate.pop(id1)
+    cluster_candidate.pop(id2)
+    #print(cluster_candidate)
+    #print(merge_list)
+
+
 
     return cluster_candidate, merge_list
 
 
 def update_distance(distance_matrix, cluster_candidate, merge_list):
     ''' Update the distantce matrix
-    
+
     Parameters:
     ------------
     distance_matrix : 2-D array
@@ -62,20 +95,23 @@ def update_distance(distance_matrix, cluster_candidate, merge_list):
         key is the updated cluster id, value is a list of point ids in the cluster
     merge_list : list of tuples
         records the two old clusters' id and points that have just been merged.
-        [(cluster_one_id, point_ids_in_cluster_one), 
+        [(cluster_one_id, point_ids_in_cluster_one),
          (cluster_two_id, point_ids_in_cluster_two)]
 
     Returns:
     ------------
     distance_matrix: 2-D array
-        updated distance matrix       
+        updated distance matrix
     '''
-    
-    # TODO
-    
-    return distance_matrix  
 
-    
+    coordList = [[a, b] for a in merge_list[0][1] for b in merge_list[1][1] if a != b]
+    for coord in coordList:
+        distance_matrix[coord[0]][coord[1]] = 100000
+        distance_matrix[coord[1]][coord[0]] = 100000
+
+    return distance_matrix
+
+
 
 def agglomerative_with_min(data, cluster_number):
     """
@@ -84,7 +120,7 @@ def agglomerative_with_min(data, cluster_number):
     Parameters:
     ------------
     data : 2-D array
-        each row represents an observation and 
+        each row represents an observation and
         each column represents an attribute
 
     cluster_number : int
@@ -109,7 +145,7 @@ def agglomerative_with_min(data, cluster_number):
                 distance_matrix[i,j] = 100000
             else:
                 distance_matrix[i,j] = np.sqrt(np.sum((data[i]-data[j])**2))
-    
+
     # hiearchical clustering loop
     T = N + 1 #cluster index
     for i in range(N-cluster_number):
@@ -120,7 +156,7 @@ def agglomerative_with_min(data, cluster_number):
         # print(cluster_candidate)
 
 
-    # assign new cluster id to each data point 
+    # assign new cluster id to each data point
     clusterAssment = [-1] * N
     for cluster_index, cluster in enumerate(cluster_candidate.values()):
         for c in cluster:

@@ -42,12 +42,35 @@ def assignCluster(dataSet, k, centroids):
     '''
     clusterAssment = []
 
-    for data in dataSet:
+    #print(type(dataSet))
+    #print(type(centroids))
+    #print(centroids)
+
+    dataSetCopy = copy.deepcopy(dataSet)
+
+    for data in dataSetCopy:
         minDist = -1
         minIndex = -1
-        for center in centroids:
-            print(center, data)
+        for cenInd, center in enumerate(centroids):
+            totalDist = 0
+            #print(data, center)
+            #print(type(data.flatten()))
+            #print(type(center.flatten()))
+            for dat, cen in zip(np.asarray(data).flatten(), np.asarray(center).flatten()):
+                #print(dat, cen)
+                totalDist += (dat - cen) ** 2
+            totalDist = sqrt(totalDist)
+            if minDist == -1 or totalDist < minDist:
+                minDist = totalDist
+                minIndex = cenInd
+        clusterAssment.append(minIndex)
 
+    print(dataSet)
+    print(centroids)
+
+
+    if False in dataSetCopy == dataSet:
+        print('changed')
 
     return clusterAssment
 
@@ -64,7 +87,43 @@ def getCentroid(dataSet, k, clusterAssment):
         centroids: cluster centroids
     '''
 
-    #TODO
+    # sortedData = [x for y, x in sorted(zip(clusterAssment, list(dataSet)))]
+    # sortedCluster = sorted(clusterAssment)
+    # centroids = []
+    #
+    # print(sortedData, sortedCluster)
+
+    dataSetCopy = copy.deepcopy(dataSet)
+
+    centroids = []
+    #print(centroids)
+
+    lastIndex = max(clusterAssment)
+    for cenInd in range(lastIndex + 1):
+        #print(cenInd)
+        indexes = np.where(np.array(clusterAssment) == cenInd)[0]
+        #print(indexes)
+        totalPoints = 0
+        for ind in indexes:
+            if isinstance(totalPoints, int):
+                totalPoints = copy.deepcopy(dataSet[ind])
+            else:
+                totalPoints += dataSet[ind]
+        #print(totalPoints)
+        totalPoints /= len(indexes)
+        #print(totalPoints.tolist()[0])
+        centroids.append(totalPoints.tolist()[0])
+    centroids = np.matrix(centroids)
+
+
+    if False in dataSetCopy == dataSet:
+        print('changed')
+    #print(centroids)
+
+
+    # newCenter
+    # for data, center in zip(sortedData, sortedCluster):
+
 
     return centroids
 

@@ -111,6 +111,8 @@ def plot(lowDDataMat, labelMat, figname):
 
 
     for point, label in zip(sets, labelMat):
+        if label == 0:
+            plt.plot(point[0], point[1], marker='o', markeredgecolor='red', markerfacecolor='red')
         if label == 1:
             plt.plot(point[0], point[1], marker='o', markeredgecolor='purple', markerfacecolor='purple')
         if label == 2:
