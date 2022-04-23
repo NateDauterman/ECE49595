@@ -112,13 +112,17 @@ def plot(lowDDataMat, labelMat, figname):
 
     for point, label in zip(sets, labelMat):
         if label == 0:
-            plt.plot(point[0], point[1], marker='o', markeredgecolor='red', markerfacecolor='red')
+            plt.plot(point[0], -1 * point[1], marker='o', markeredgecolor='red', markerfacecolor='red')
         if label == 1:
-            plt.plot(point[0], point[1], marker='o', markeredgecolor='purple', markerfacecolor='purple')
+            plt.plot(point[0], -1 * point[1], marker='o', markeredgecolor='purple', markerfacecolor='purple')
         if label == 2:
-            plt.plot(point[0], point[1], marker='o', markeredgecolor='lightseagreen', markerfacecolor='lightseagreen')
+            plt.plot(point[0], -1 * point[1], marker='o', markeredgecolor='lightseagreen', markerfacecolor='lightseagreen')
         if label == 3:
-            plt.plot(point[0], point[1], marker='o', markeredgecolor='yellow', markerfacecolor='yellow')
+            plt.plot(point[0], -1 * point[1], marker='o', markeredgecolor='yellow', markerfacecolor='yellow')
+
+    #plt.invert_yaxis()
+    #ax = plt.gca()
+    #ax.invert_yaxis()
 
 
     #plt.plot(sets[0], sets[1], 'ro')
